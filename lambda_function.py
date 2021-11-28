@@ -6,7 +6,7 @@ from slack_bolt.adapter.aws_lambda import SlackRequestHandler
 
 
 def respond_to_slack_within_3_seconds(body, ack):
-    ack(f"Accepted command: {body['command']} {body['text']}")
+    ack(f"Accepted command: {body['command']} {body['text']}", response_type="in_channel")
 
 
 def redis_sbi(respond, body):
@@ -17,7 +17,7 @@ def redis_sbi(respond, body):
     redis_command = body["text"]
     output = subprocess.getoutput(f"redis-cli --no-auth-warning -c -h {redis_host} -p {redis_port}"
                                   f"{' -a ' + redis_password if redis_password else ''} {redis_command}")
-    respond(f" > {output}")
+    respond(f" > {output}", response_type="in_channel")
     print(f"Finished processing request: {body}")
 
 
